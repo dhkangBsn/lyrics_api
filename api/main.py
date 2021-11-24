@@ -42,7 +42,7 @@ def get_recommend_list(name):
 def lyrics_genre_classification(lyrics):
    lyrics = [lyrics]
    vect = vectorizer.transform(lyrics)
-   temp_df = pd.DataFrame(vect.A, columns=vectorizer.get_feature_names_out())
+   temp_df = pd.DataFrame(vect.A, columns=vectorizer.get_feature_names())
    temp_result = list(model_lr.predict(temp_df))
    if temp_result[0] == 1:
       return 'ballad, broke up'
