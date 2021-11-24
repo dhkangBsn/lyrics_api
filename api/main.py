@@ -1,5 +1,7 @@
 from flask import Flask, redirect, url_for, request,jsonify
 import pickle
+PICKLE_PROTOCOL = pickle.HIGHEST_PROTOCOL
+
 import numpy as np
 import pandas as pd
 app = Flask(__name__)
