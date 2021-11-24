@@ -43,9 +43,9 @@ def lyrics_genre_classification(lyrics):
    temp_df = pd.DataFrame(vect.A, columns=vectorizer.get_feature_names_out())
    temp_result = list(model_lr.predict(temp_df))
    if temp_result[0] == 1:
-      return '이별발라드'
+      return 'ballad, broke up'
    else:
-      return '발라드'
+      return 'ballad'
 
 @app.route('/recommend', methods=['POST'])
 def hello_world():
