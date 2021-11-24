@@ -21,10 +21,14 @@ def get_vectorizer():
 def get_model_lr():
    return pickle.load(open("../model/model_lr.pkl", "rb"))
 
+def get_cosine_emotion():
+   return pickle.load(open("../model/ballad_emotion_sims.pkl", "rb"))
+
 title_to_idx = get_title_to_idx()
 cosine_tfidf = get_cosine_tfidf()
 vectorizer = get_vectorizer()
 model_lr = get_model_lr()
+emotion_sims = get_cosine_emotion()
 
 def get_recommend_list(name):
 
@@ -54,14 +58,15 @@ def hello_world():
    if request.method == 'POST':
       name = request.form['name']
       cur_idx = list(df[df['title'] == name].index)[0]
-      print(cur_idx)
+      emotion = -emotion_sims[int(cur_idx)]
+      emotion_idx = np.argsort(emotion)[1:11]
+      emotion_title = list(df.loc[emotion_idx, 'title'].values)
+      print(emotion_title)
+      print(type(emotion_title))
       cur_lyrics = df.loc[cur_idx,'lyrics']
-      print(cur_lyrics)
       genre = lyrics_genre_classification(cur_lyrics)
-      print(genre)
       recommend_list, top_ten_list = map(list, get_recommend_list(request.form['name']))
-      print(top_ten_list)
-      return jsonify({"recommend_list":recommend_list, 'genre' : genre, "recommend_index_list": top_ten_list})
+      return jsonify({"recommend_list":recommend_list, 'genre' : genre, "recommend_index_list": top_ten_list, 'emotion_title': emotion_title})
 
 if __name__ == '__main__':
    app.run(host='0.0.0.0', port=5000,debug = True)
