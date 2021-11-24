@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
-df = pd.read_csv('../data/발라드.csv', encoding='cp949')
+df = pd.read_csv('../data/ballad.csv', encoding='cp949')
 
 
 def get_title_to_idx():
