@@ -34,7 +34,7 @@ def get_recommend_list(name):
 
    title_idx = title_to_idx[name]
 
-   top_ten = np.argsort(cosine_tfidf[title_idx])[::-1][1:11]
+   top_ten = np.argsort(cosine_tfidf[title_idx])[::-1][2:12]
    top_ten = list(map(str, top_ten))
    recommend_list = list(df.iloc[top_ten].title.values)
    return recommend_list, top_ten
