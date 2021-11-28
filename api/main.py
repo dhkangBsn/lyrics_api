@@ -6,14 +6,14 @@ import numpy as np
 import pandas as pd
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
-df = pd.read_csv('../data/ballad.csv', encoding='cp949')
+df = pd.read_csv('../data/ballad.csv')
 
 
 def get_title_to_idx():
    return pickle.load(open("../model/ballad_title_to_idx.pkl", 'rb'))
 
 def get_cosine_tfidf():
-   return pickle.load(open("../model/ballad_sims_cosine_tfidf.pkl", 'rb'))
+   return pickle.load(open("../model/ballad_sims_cosine.pkl", 'rb'))
 
 def get_vectorizer():
    return pickle.load(open("../model/count_vectorizer.pkl", 'rb'))
@@ -33,15 +33,11 @@ emotion_sims = get_cosine_emotion()
 def get_recommend_list(name):
 
    title_idx = title_to_idx[name]
-   #print(f'current index : {title_idx}')
 
    top_ten = np.argsort(cosine_tfidf[title_idx])[::-1][1:11]
-   #print(top_ten)
    top_ten = list(map(str, top_ten))
    recommend_list = list(df.iloc[top_ten].title.values)
    return recommend_list, top_ten
-   #return jsonify({"recommend_list": list(df.iloc[top_ten].title.values)})
-
 
 def lyrics_genre_classification(lyrics):
    lyrics = [lyrics]
@@ -59,7 +55,7 @@ def hello_world():
       name = request.form['name']
       cur_idx = list(df[df['title'] == name].index)[0]
       emotion = -emotion_sims[int(cur_idx)]
-      emotion_idx = np.argsort(emotion)[1:11]
+      emotion_idx = np.argsort(emotion)[1:14]
       emotion_title = list(df.loc[emotion_idx, 'title'].values)
       print(emotion_title)
       print(type(emotion_title))
